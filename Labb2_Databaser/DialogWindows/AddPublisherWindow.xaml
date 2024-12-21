@@ -1,0 +1,86 @@
+﻿<Window x:Class="Labb2_Databaser.DialogWindows.AddPublisherWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Labb2_Databaser.DialogWindows"
+        mc:Ignorable="d"
+        Title="Nytt Förlag" Height="300" Width="270">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Förlagsnamn:" 
+                   Grid.Row="0" 
+                   Grid.Column="0" 
+                   VerticalAlignment="Center"/>
+        <TextBox Text="{Binding Namn}" 
+                 Grid.Row="0" 
+                 Grid.Column="1" 
+                 Margin="5"/>
+
+        <TextBlock Text="Telefonnummer:" 
+                   Grid.Row="1"
+                   Grid.Column="0" 
+                   VerticalAlignment="Center"/>
+        <TextBox Text="{Binding TelefonNummer}" 
+                 Grid.Row="1" 
+                 Grid.Column="1" 
+                 Margin="5"/>
+
+        <TextBlock Text="Adress:" 
+                   Grid.Row="2" 
+                   Grid.Column="0" 
+                   VerticalAlignment="Center"/>
+        <TextBox Text="{Binding Adress}" 
+                 Grid.Row="2" 
+                 Grid.Column="1" 
+                 Margin="5"/>
+
+        <TextBlock Text="Postnummer:" 
+                   Grid.Row="3" 
+                   Grid.Column="0" 
+                   VerticalAlignment="Center"/>
+        <TextBox Text="{Binding PostNummer}" 
+                 Grid.Row="3" 
+                 Grid.Column="1" 
+                 Margin="5"/>
+
+        <TextBlock Text="Ort:" 
+                   Grid.Row="4" 
+                   Grid.Column="0" 
+                   VerticalAlignment="Center"/>
+        <TextBox Text="{Binding Ort}" 
+                 Grid.Row="4" 
+                 Grid.Column="1" 
+                 Margin="5"/>
+
+        <StackPanel Grid.Row="5" 
+                    Grid.ColumnSpan="2" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right" 
+                    Margin="0,10,5,5" 
+                    Width="245">
+            <Button Content="Spara" 
+                    Click="Confirm_Click" 
+                    Margin="20,0,0,0" 
+                    Height="32" 
+                    Width="90"/>
+            <Button Content="Avbryt" 
+                    Click="Cancel_Click" 
+                    Margin="45,0,0,0" 
+                    Height="32" 
+                    Width="90"/>
+        </StackPanel>
+    </Grid>
+</Window>

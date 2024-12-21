@@ -1,0 +1,70 @@
+﻿<Window x:Class="Labb2_Databaser.DialogWindows.AddAuthorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Författare" Height="300" Width="400">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Förnamn:" 
+                   Grid.Row="0" 
+                   Grid.Column="0" 
+                   VerticalAlignment="Center"/>
+        <TextBox Text="{Binding Förnamn}" 
+                 Grid.Row="0" 
+                 Grid.Column="1" 
+                 Margin="5"/>
+
+        <TextBlock Text="Efternamn:" 
+                   Grid.Row="1"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"/>
+        <TextBox Text="{Binding Efternamn}" 
+                 Grid.Row="1"
+                 Grid.Column="1"
+                 Margin="5"/>
+
+        <TextBlock Text="Födelsedatum:" 
+                   Grid.Row="2"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"/>
+        <DatePicker SelectedDate="{Binding Födelsedatum}" 
+                    Grid.Row="2" 
+                    Grid.Column="1" 
+                    Margin="5"/>
+
+        <TextBlock Text="Dödsdatum:" 
+                   Grid.Row="3"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"/>
+        <DatePicker SelectedDate="{Binding Dödsdatum}" 
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Margin="5"/>
+
+        <StackPanel Grid.Row="4" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Center"
+                    Margin="0,8,75,0" Grid.Column="1">
+            <Button Content="Spara" 
+                    Click="Confirm_Click" 
+                    Width="100"
+                    Height="50"
+                    Margin="5"/>
+            <Button Content="Avbryt" 
+                    Click="Cancel_Click"
+                    Width="100"
+                    Height="50"
+                    Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,118 @@
+﻿<Window x:Class="Labb2_Databaser.DialogWindows.UpdateSaldoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Labb2_Databaser.DialogWindows" xmlns:viewmodel="clr-namespace:Labb2_Databaser.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
+        mc:Ignorable="d"
+        Title="LagerSaldo" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Butik:" 
+                   Grid.Row="0"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"/>
+        
+        <ComboBox x:Name="StoreComboBox"
+          Grid.Row="0"
+          Grid.Column="1"
+          Margin="5"
+          DisplayMemberPath="Butiksnamn"
+          ItemsSource="{Binding Butiker}"
+          SelectedItem="{Binding SelectedButik, Mode=TwoWay}"
+          SelectionChanged="StoreComboBox_SelectionChanged"/>
+
+        <TextBlock Text="Bok:" 
+                   Grid.Row="1"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"/>
+        <TextBlock Text="Bok:" 
+                   Grid.Row="1" 
+                   Grid.Column="0" 
+                   VerticalAlignment="Center"/>
+        <ComboBox x:Name="BookComboBox"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="5"
+                    DisplayMemberPath="Titel"
+                    ItemsSource="{Binding Books}"
+                    SelectedItem="{Binding SelectedBook}"
+                    SelectionChanged="BookComboBox_SelectionChanged"/>
+
+        <TextBlock Text="Kvantitet:" 
+                   Grid.Row="2" 
+                   Grid.Column="0" 
+                   VerticalAlignment="Center"/>
+        <TextBox x:Name="QuantityTextBox" 
+                 Grid.Row="2" 
+                 Grid.Column="1" 
+                 Margin="5"/>
+
+        <TextBlock x:Name="StockInfoTextBlock" 
+                   Grid.Row="3" 
+                   Grid.ColumnSpan="2" 
+                   Margin="5" 
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Left"/>
+
+        <StackPanel Grid.Row="4" 
+                    Grid.ColumnSpan="2" 
+                    Orientation="Vertical" 
+                    HorizontalAlignment="Right" 
+                    Margin="5">
+            <Button Content="Bekräfta" 
+                    Click="Confirm_Click"
+                    IsEnabled="{Binding IsValidButikerSelected}"
+                    Height="90" 
+                    Width="170"
+                    Margin="10,80,10,10"/>
+            <Button Content="Avbryt" 
+                    Click="Cancel_Click"
+                    Height="90" 
+                    Width="170" 
+                    Margin="10,10,10,10"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="3"
+                  ItemsSource="{Binding LagerSaldo}" 
+                  SelectedItem="{Binding SelectedLagerSaldo}" 
+                  AutoGenerateColumns="False"
+                  ColumnWidth="*" 
+                  Margin="0,10,300,10" 
+                  Grid.ColumnSpan="2"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ISBN" Binding="{Binding Isbn}"/>
+                <DataGridTextColumn Header="Titel" Binding="{Binding IsbnNavigation.Titel}"/>
+                <DataGridTextColumn Header="Antal" Binding="{Binding Antal}"/>
+                <DataGridTemplateColumn Header="Butik">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Butik.Butiksnamn}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DataContext.IsAllButikerSelected, RelativeSource={RelativeSource AncestorType=DataGrid}}" Value="False">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

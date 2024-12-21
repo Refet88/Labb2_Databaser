@@ -1,0 +1,206 @@
+﻿<Window x:Class="Labb2_Databaser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Labb2_Databaser.Converters" 
+        xmlns:viewmodel="clr-namespace:Labb2_Databaser.ViewModel" 
+        d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="875"
+        PreviewMouseDown="Window_PreviewMouseDown">
+    <Window.Resources>
+        <local:AuthorNamesConverter x:Key="AuthorNamesConverter"/>
+        <local:BookFilterConverter x:Key="BookFilterConverter"/>
+
+        <Style TargetType="DataGridRow">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="False">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGridCell">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="False">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="630*"/>
+            <ColumnDefinition Width="170*"/>
+        </Grid.ColumnDefinitions>
+
+        <TabControl Grid.Column="0" SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Header="Butiker">
+                <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                    <ComboBox Width="200"
+                              Margin="200,0,0,150"
+                              VerticalAlignment="Center"
+                              ItemsSource="{Binding Butiker}"
+                              SelectedItem="{Binding SelectedButik, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Butiksnamn}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Böcker">
+                <StackPanel>
+                    <Button Content="Lägg till bok" Command="{Binding AddBookCommand}" Margin="10"/>
+                    <Button Content="Ta bort bok" Command="{Binding RemoveBookCommand}" Margin="10"/>
+                    <Button Content="Uppdatera" Command="{Binding UpdateBooksCommand}" Margin="10"/>
+                    <DataGrid ItemsSource="{Binding Books}" 
+                  SelectedItem="{Binding SelectedBook}" 
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False"
+                  Margin="10" 
+                  PreparingCellForEdit="DataGrid_PreparingCellForEdit"
+                  MouseDoubleClick="DataGrid_MouseDoubleClick" 
+                  CellEditEnding="DataGrid_CellEditEnding">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <DataTrigger Value="False">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding Converter="{StaticResource BookFilterConverter}">
+                                                <Binding Path="."/>
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ISBN" Binding="{Binding Isbn13}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Titel" Binding="{Binding Titel}"/>
+                            <DataGridTextColumn Header="Författare" Binding="{Binding FörfattareBöcker, Converter={StaticResource AuthorNamesConverter}}"
+                                                IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Förlag" Binding="{Binding Förlag.Namn}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Författare">
+                <StackPanel>
+                    <Button Content="Lägg till författare" Command="{Binding AddAuthorCommand}" Margin="10"/>
+                    <Button Content="Ta bort författare" Command="{Binding RemoveAuthorCommand}" Margin="10"/>
+                    <Button Content="Uppdatera" Command="{Binding UpdateAuthorsCommand}" Margin="10"/>
+                    <DataGrid 
+                        ItemsSource="{Binding Authors}" 
+                        SelectedItem="{Binding SelectedAuthor, Mode=TwoWay}" 
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        Margin="10" 
+                        PreparingCellForEdit="DataGrid_PreparingCellForEdit"
+                        MouseDoubleClick="DataGrid_MouseDoubleClick" 
+                        CellEditEnding="DataGrid_CellEditEnding">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
+                            <DataGridTextColumn Header="Förnamn" Binding="{Binding Förnamn}"/>
+                            <DataGridTextColumn Header="Efternamn" Binding="{Binding Efternamn}"/>
+                            <DataGridTextColumn Header="Födelsedatum" Binding="{Binding Födelsedatum}"/>
+                            <DataGridTextColumn Header="Dödsdatum" Binding="{Binding Dödsdatum}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Förlag">
+                <StackPanel>
+                    <Button Content="Lägg till förlag" Command="{Binding AddPublisherCommand}" Margin="10"/>
+                    <Button Content="Ta bort förlag" Command="{Binding RemovePublisherCommand}" Margin="10"/>
+                    <Button Content="Uppdatera" Command="{Binding UpdatePublishersCommand}" Margin="10"/>
+                    <DataGrid 
+                        ItemsSource="{Binding Publishers}" 
+                        SelectedItem="{Binding SelectedPublisher, Mode=TwoWay}" 
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        Margin="10" 
+                        PreparingCellForEdit="DataGrid_PreparingCellForEdit"
+                        MouseDoubleClick="DataGrid_MouseDoubleClick" 
+                        CellEditEnding="DataGrid_CellEditEnding">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding FörlagId}"/>
+                            <DataGridTextColumn Header="Namn" Binding="{Binding Namn}"/>
+                            <DataGridTextColumn Header="Adress" Binding="{Binding Adress}"/>
+                            <DataGridTextColumn Header="Postnummer" Binding="{Binding PostNummer}"/>
+                            <DataGridTextColumn Header="Ort" Binding="{Binding Ort}" />
+                            <DataGridTextColumn Header="Telefonnummer" Binding="{Binding TelefonNummer}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Lagersaldo">
+                <StackPanel>
+                    <Button Content="Uppdatera Saldo" Command="{Binding UpdateSaldoCommand}" Margin="10"/>
+                    <DataGrid 
+                        ItemsSource="{Binding LagerSaldo}" 
+                        SelectedItem="{Binding SelectedLagerSaldo, Mode=TwoWay}" 
+                        AutoGenerateColumns="False"
+                        ColumnWidth="*" 
+                        Margin="10"
+                        IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ISBN" Binding="{Binding Isbn}" Width="SizeToCells"/>
+                            <DataGridTextColumn Header="Titel" Binding="{Binding IsbnNavigation.Titel}" Width="SizeToCells"/>
+                            <DataGridTextColumn Header="Författare" Binding="{Binding IsbnNavigation.FörfattareBöcker, Converter={StaticResource AuthorNamesConverter}}" Width="SizeToCells"/>
+                            <DataGridTextColumn Header="Pris" Binding="{Binding IsbnNavigation.Pris}" Width="SizeToCells"/>
+                            <DataGridTextColumn Header="Antal" Binding="{Binding Antal}" Width="SizeToHeader"/>
+                            <DataGridTemplateColumn Header="Butik" Width="SizeToCells">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Butik.Butiksnamn}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding DataContext.IsAllButikerSelected, RelativeSource={RelativeSource AncestorType=DataGrid}}" Value="False">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
+        <StackPanel Grid.Column="1" Margin="10,10,10,10">
+            <TextBlock Text="Butiksinformation" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+            <TextBlock Text="Butiksnamn:" FontWeight="Bold"/>
+            <TextBlock Text="{Binding SelectedButik.Butiksnamn}" Margin="0,0,0,10"/>
+            <TextBlock Text="Adress:" FontWeight="Bold"/>
+            <TextBlock Text="{Binding SelectedButik.Adress}" Margin="0,0,0,10"/>
+            <TextBlock Text="Postnummer:" FontWeight="Bold"/>
+            <TextBlock Text="{Binding SelectedButik.PostNummer}" Margin="0,0,0,10"/>
+            <TextBlock Text="Ort:" FontWeight="Bold"/>
+            <TextBlock Text="{Binding SelectedButik.Ort}" Margin="0,0,0,10"/>
+        </StackPanel>
+    </Grid>
+</Window>
